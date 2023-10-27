@@ -23,11 +23,11 @@ public class JwtService {
     private static final String SECRET_KEY = ("9c56bbb2442aa20f7d48ce5ba13b75c38000266334fb008387322a8a8ff24944").toUpperCase();
 
     public String extractUsername(String jwtToken) {
-        return extractClaim(jwtToken, Claims::getSubject);
+        return extractClaim(jwtToken, Claims::getSubject);// ну тут получается их клейма мы нюхаем юзернейм, те почта
     }
     public <T> T extractClaim (String jwtToken, Function<Claims, T> claimsResolver){
         final Claims claims = extractAllClaims(jwtToken);
-        return claimsResolver.apply(claims);
+        return claimsResolver.apply(claims);// клейм какой то, ну по идее это что то этакое, как энтропия, всегда есть и будет, насчет постоянства не знаю, хуйней пахнет
     }
     public String generateToken(UserDetails userDetails){
         return generateToken(new HashMap<>(), userDetails);// потом че то сделает негр, я хуй знает
@@ -60,12 +60,12 @@ public class JwtService {
                 .parserBuilder()
                 .setSigningKey(getSignInKey())
                 .build()
-                .parseClaimsJwt(jwtToken)
-                .getBody();
+                .parseClaimsJws(jwtToken)
+                .getBody();// тут мы все клеймы кушаем, я так понял клейм это поля запроса, а может и нет. я ебу что ли? я ведь не пушкин
     }
 
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
+        return Keys.hmacShaKeyFor(keyBytes);// опять оиб попер, ну то дешифровка по ключу
     }
 }

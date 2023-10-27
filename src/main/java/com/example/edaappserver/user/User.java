@@ -2,6 +2,10 @@ package com.example.edaappserver.user;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,41 +15,35 @@ import java.util.List;
 
 @Entity
 @Table(name = "userTable")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class User implements UserDetails {
     @Id
-    @GeneratedValue
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_sequence"
+    )
     private long id;
     private String name;
     private String surname;
     private String email;
-    private String password;
+    private String passwordus;
     @Enumerated(EnumType.STRING)
     private Role role;
-    public User() {
-    }
-
-    public User(int id, String name, String surname, String email, String password) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.password = password;
-    }
-
-    public User(String name, String surname, String email, String password) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.password = password;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
-
+    @Override
     public String getPassword() {
-        return password;
+        return passwordus;
     }
 
     @Override
@@ -71,41 +69,5 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 }
