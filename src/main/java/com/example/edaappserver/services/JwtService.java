@@ -38,7 +38,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis())) // когда создан токен
-                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 24 * 7))) // время действия (текущее время + (1000 мс * 60 * 24 * 7)) те 7 дней
+                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 60 * 24 * 7))) // время действия (текущее время + (1000 мс * 60 * 24 * 7)) те 7 дней
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256) // подпись токена, хуйня какая то, негр реально смешной, он говорит ЭЙ ЧЕС ТУ ФАЙВ СИКС, забавный короче
                 .compact(); // ад закончен, токен создан, наверное... я в ахуе от этих манипуляций. Ну а че, безопасность.
     }
