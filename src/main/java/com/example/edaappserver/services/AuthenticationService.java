@@ -46,9 +46,8 @@ public class AuthenticationService {
         try {
             var userDB = userRepository.findByEmail(request.getEmail()).orElseThrow();
             if (user.getUsername().equals(userDB.getUsername()))
-                return AuthenticationResponse.builder()
-                        .token("1")
-                        .build();
+                throw new UsernameNotFoundException("потом доделаю и не ебет");
+            // todo сделать нормально, а не хуйню с исключениями
         }catch (Exception e){
 
         }
