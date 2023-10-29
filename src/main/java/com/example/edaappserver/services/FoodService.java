@@ -30,10 +30,23 @@ public class FoodService {
                 .quantity(addFoodRequest.getQuantity())
                 .price(addFoodRequest.getPrice())
                 .name(addFoodRequest.getName())
+                .pictureUrl(
+                        "server.com/static/pictures/"
+                        // todo походу проканало, но вот ощущение что хуйню сделал, по моему проще на месте адрес формировать.
+                )
                 .build();
 
         foodRepositoty.save(food);
-        return "походу проконало, ахуеть";
+        setFoodUrl(food);
+        return "походу проконало, ахуеть " + food.getId();
+    }
+
+    private String setFoodUrl(Food food){
+        food.setPictureUrl(
+                food.getPictureUrl() + food.getId() + ".jpg"
+        );
+        foodRepositoty.save(food);
+        return foodRepositoty.findById(food.getId()).toString();
     }
 
     public String deleteFood(DeleteFoodRequest addFoodRequest) {
@@ -56,4 +69,6 @@ public class FoodService {
         foodRepositoty.save(food);
         return "калич";
     }
+
+
 }
