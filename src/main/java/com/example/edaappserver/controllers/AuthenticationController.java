@@ -1,6 +1,7 @@
 package com.example.edaappserver.controllers;
 
 import com.example.edaappserver.requests.AuthenticationRequest;
+import com.example.edaappserver.requests.ChangeRoleRequest;
 import com.example.edaappserver.requests.RegisterRequest;
 import com.example.edaappserver.responses.AuthenticationResponse;
 import com.example.edaappserver.services.AuthenticationService;
@@ -26,5 +27,12 @@ public class AuthenticationController {
             @RequestBody AuthenticationRequest request
     ){
         return ResponseEntity.ok(authenticationService.authenticate(request));
+    }
+
+    @PostMapping("/changeRole")
+    public String changeRole(
+            @RequestBody ChangeRoleRequest request
+            ){
+        return authenticationService.changeRole(request);
     }
 }

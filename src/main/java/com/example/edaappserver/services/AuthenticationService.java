@@ -2,10 +2,11 @@ package com.example.edaappserver.services;
 
 import com.example.edaappserver.repositories.UserRepository;
 import com.example.edaappserver.requests.AuthenticationRequest;
+import com.example.edaappserver.requests.ChangeRoleRequest;
 import com.example.edaappserver.requests.RegisterRequest;
 import com.example.edaappserver.responses.AuthenticationResponse;
 import com.example.edaappserver.user.Role;
-import com.example.edaappserver.user.User;
+import com.example.edaappserver.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,7 +37,7 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse register(RegisterRequest request) {
-        var user = User.builder()
+        var user = UserEntity.builder()
                 .name(request.getName())
                 .surname(request.getSurname())
                 .email(request.getEmail())
@@ -58,4 +59,10 @@ public class AuthenticationService {
                 .build();
     }
 
+    public String changeRole(ChangeRoleRequest request) {
+        var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        user.setRole(Role.ADMIN);
+        userRepository.save(user);
+        return user.getRole().toString();
+    }
 }
