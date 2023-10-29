@@ -1,10 +1,16 @@
 package com.example.edaappserver.restaurant;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table
-public class Food<T> implements Comparable<Food> {
+public class Food<T> implements Comparable<Food>{
     @Id
     @SequenceGenerator(
             name = "food_sequence",
@@ -21,18 +27,7 @@ public class Food<T> implements Comparable<Food> {
     private String name;
     private String pictureUrl;
 
-    public Food() {
-    }
-
     public Food(int quantity, double price, String name, String pictureUrl) {
-        this.quantity = quantity;
-        this.price = price;
-        this.name = name;
-        this.pictureUrl = pictureUrl;
-    }
-
-    public Food(int id, int quantity, double price, String name, String pictureUrl) {
-        this.id = id;
         this.quantity = quantity;
         this.price = price;
         this.name = name;
