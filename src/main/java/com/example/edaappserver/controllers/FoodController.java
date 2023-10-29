@@ -24,7 +24,7 @@ public class FoodController {
         return foodService.getFood();
     }
 
-    // todo добавка еды хуйня, переделать (пиздеж, логику доделать блять я калоед, у меня ник в радуге KALOED)
+    // todo добавка еды хуйня, переделать (пиздеж, логику доделать блять я калоед, у меня ник в радуге KALOED) черничка
     @PostMapping("/addFood")
     public String addFood(@RequestBody AddFoodRequest request){
     return foodService.addFood(request);
