@@ -11,4 +11,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
      @Override
      void delete(UserEntity entity);
 
+     @Override
+     void deleteById(Integer integer);
 }
