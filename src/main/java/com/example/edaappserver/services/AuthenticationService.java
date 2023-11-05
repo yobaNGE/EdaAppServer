@@ -59,6 +59,29 @@ public class AuthenticationService {
                 .build();
     }
 
+    public AuthenticationResponse createAdmin (RegisterRequest request)  {
+        var user = UserEntity.builder()
+                .name(request.getName())
+                .surname(request.getSurname())
+                .email(request.getEmail())
+                .passwordus(passwordEncoder.encode(request.getPassword()))
+                .role(Role.ADMIN)
+                .build();
+        try {
+            var userDB = userRepository.findByEmail(request.getEmail()).orElseThrow();
+            if (user.getUsername().equals(userDB.getUsername()))
+                throw new UsernameNotFoundException("потом доделаю и не ебет");
+            // todo сделать нормально, а не хуйню с исключениями
+        }catch (Exception e){
+
+        }
+        userRepository.save(user);
+        var jwtToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
+    }
+
     public String changeRole(ChangeRoleRequest request) {
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         user.setRole(Role.ADMIN);

@@ -11,7 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@Deprecated
 @RestController
 @RequestMapping(path = "api/v1/restaurant/food")
 public class FoodController {
