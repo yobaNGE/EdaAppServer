@@ -27,13 +27,6 @@ public class Food<T> implements Comparable<Food>{
     private String name;
     private String pictureUrl;
 
-    public Food(int quantity, double price, String name, String pictureUrl) {
-        this.quantity = quantity;
-        this.price = price;
-        this.name = name;
-        this.pictureUrl = pictureUrl;
-    }
-
     public int getId() {
         return id;
     }
@@ -77,17 +70,12 @@ public class Food<T> implements Comparable<Food>{
     @Override
     public int compareTo(Food o) {
         int id = o.getId();
-        try {
             if (this.id < id)
                 return -1;
             else if (this.id == id)
                 return 0;
-            else if (this.id > id)
+            else
                 return 1;
-        } catch(Exception e) {
-            return 0;
-        }
-        return 0;
     }
 
     @Override

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "api/v1/admin/")
 @RequiredArgsConstructor
+//@EnableWebSecurity
 public class AdminController {
     private final FoodService foodService;
     private final AuthenticationService authenticationService;
