@@ -1,9 +1,10 @@
 package com.example.edaappserver.controllers;
 
-import com.example.edaappserver.repositories.FoodRepositoty;
 import com.example.edaappserver.requests.AddFoodRequest;
+import com.example.edaappserver.requests.ChangeRoleRequest;
 import com.example.edaappserver.requests.DeleteFoodRequest;
 import com.example.edaappserver.requests.EditFoodRequest;
+import com.example.edaappserver.services.AuthenticationService;
 import com.example.edaappserver.services.FoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AdminController {
     private final FoodService foodService;
+    private final AuthenticationService authenticationService;
     @PostMapping ("/addFood")
     public String addFood(@RequestBody AddFoodRequest request){
         return foodService.addFood(request);
@@ -28,4 +30,10 @@ public class AdminController {
         return foodService.editFood(request);
     }
 
+    @PutMapping("/changeRole")
+    public String changeRole(
+            @RequestBody ChangeRoleRequest request
+    ){
+        return authenticationService.changeRole(request);
+    }
 }

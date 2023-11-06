@@ -1,19 +1,13 @@
 package com.example.edaappserver.config;
 
-import com.example.edaappserver.user.Permission;
-import com.example.edaappserver.user.Role;
-import jakarta.servlet.Filter;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -42,7 +36,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT,"/api/v1/staff/**").hasAnyAuthority(ADMIN_UPDATE.name(),STAFF_UPDATE.name())
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/staff/**").hasAnyAuthority(ADMIN_DELETE.name(),STAFF_DELETE.name())
 
-                        .requestMatchers("/api/v1/staff/**").hasRole(ADMIN.name())
+                        .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
 
                         .requestMatchers(HttpMethod.GET,"/api/v1/admin/**").hasAuthority(ADMIN_READ.name())
                         .requestMatchers(HttpMethod.POST,"/api/v1/admin/**").hasAuthority(ADMIN_CREATE.name())
