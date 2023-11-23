@@ -1,12 +1,11 @@
 package com.example.edaappserver.services;
 
-import com.example.edaappserver.repositories.FoodRepositoty;
+import com.example.edaappserver.repositories.FoodRepository;
 import com.example.edaappserver.requests.AddFoodRequest;
 import com.example.edaappserver.requests.DeleteFoodRequest;
 import com.example.edaappserver.requests.EditFoodRequest;
 import com.example.edaappserver.restaurant.Food;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +13,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FoodService {
-    private final FoodRepositoty foodRepositoty;
-
+    private final FoodRepository foodRepository;
     public List<Food> getFood() {
-        return foodRepositoty.findAll();
+        return foodRepository.findAll();
     }
+
 
     // todo тоже хуйня, переделать нормально
     public String addFood(AddFoodRequest addFoodRequest) {
@@ -36,23 +35,31 @@ public class FoodService {
                 )
                 .build();
 
-        foodRepositoty.save(food);
+        foodRepository.save(food);
         setFoodUrl(food);
         return "походу проконало, ахуеть " + food.getId();
     }
 
-    private String setFoodUrl(Food food){
+    public String setFoodUrl(Food food){
         food.setPictureUrl(
                 food.getPictureUrl() + food.getId() + ".jpg"
         );
-        foodRepositoty.save(food);
-        return foodRepositoty.findById(food.getId()).toString();
+        foodRepository.save(food);
+        return foodRepository.findById(food.getId()).toString();
+    }
+
+    public String setFoodPrice(Food food){
+        food.setPrice(
+                food.getPrice()
+        );
+        foodRepository.save(food);
+        return foodRepository.findById(food.getId()).toString();
     }
 
     public String deleteFood(DeleteFoodRequest addFoodRequest) {
         //    private int id;
 
-        foodRepositoty.deleteById(addFoodRequest.getId());
+        foodRepository.deleteById(addFoodRequest.getId());
         return "походу удалило, ахуеть";
     }
 
@@ -66,7 +73,7 @@ public class FoodService {
                 .quantity(request.getQuantity())
                 .price(request.getPrice())
                 .name(request.getName()).build();
-        foodRepositoty.save(food);
+        foodRepository.save(food);
         return "калич";
 
     }

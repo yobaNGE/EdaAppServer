@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table
-public class Food<T> implements Comparable<Food>{
+public class Food implements Comparable<Food>{
     @Id
     @SequenceGenerator(
             name = "food_sequence",

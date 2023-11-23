@@ -1,6 +1,5 @@
 package com.example.edaappserver.controllers;
 
-import com.example.edaappserver.repositories.FoodRepositoty;
 import com.example.edaappserver.restaurant.Food;
 import com.example.edaappserver.services.FoodService;
 import lombok.RequiredArgsConstructor;

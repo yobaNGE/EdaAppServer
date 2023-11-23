@@ -7,7 +7,12 @@ import com.example.edaappserver.requests.EditFoodRequest;
 import com.example.edaappserver.services.AuthenticationService;
 import com.example.edaappserver.services.FoodService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.internal.util.type.PrimitiveWrapperHelper;
 import org.springframework.web.bind.annotation.*;
+
+import javax.swing.*;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @RequestMapping(path = "api/v1/admin/")
@@ -31,10 +36,11 @@ public class AdminController {
         return foodService.editFood(request);
     }
 
-    @PutMapping("/changeRole")
+    @PutMapping("/changeRole/{id}")
     public String changeRole(
             @RequestBody ChangeRoleRequest request
     ){
+        int ids= Integer.parseInt(String.valueOf(id));
         return authenticationService.changeRole(request);
     }
 }

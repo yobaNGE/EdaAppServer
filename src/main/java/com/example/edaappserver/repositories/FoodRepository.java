@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface FoodRepositoty extends JpaRepository<Food,Integer> {
+public interface FoodRepository extends JpaRepository<Food,Integer> {
     @Override
     void deleteById(Integer integer);
 
@@ -16,4 +16,5 @@ public interface FoodRepositoty extends JpaRepository<Food,Integer> {
     List<Food> findAll();
 
     Optional<Food> findFoodByName(String name);
+    Optional<Food> findFoodById(long id);
 }
