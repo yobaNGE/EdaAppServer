@@ -34,7 +34,7 @@ public class OrderEntity {
     1-заказ оплачен
     2-заказ готов
     3-заказ отменен
-    4-...
+    4- ...
     */
     //@ManyToMany(targetEntity = OrderItemEntity.class, cascade = CascadeType.ALL)
     @OneToMany(targetEntity = OrderItemEntity.class)
