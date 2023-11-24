@@ -29,7 +29,7 @@ public class OrderItemEntity {
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private OrderEntity order;
 
-    @ManyToOne(targetEntity = Food.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = FoodEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "food_id", referencedColumnName = "id")
-    private Food food;
+    private FoodEntity food;
 }
