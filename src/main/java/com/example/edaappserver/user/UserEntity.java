@@ -1,6 +1,7 @@
 package com.example.edaappserver.user;
 
 
+import com.example.edaappserver.restaurant.OrderEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +38,10 @@ public class UserEntity implements UserDetails {
     private String passwordus;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(targetEntity = OrderEntity.class)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private List<OrderEntity> orderEntityList;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getUserAuthorities();

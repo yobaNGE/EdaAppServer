@@ -4,7 +4,7 @@ import com.example.edaappserver.repositories.FoodRepository;
 import com.example.edaappserver.requests.AddFoodRequest;
 import com.example.edaappserver.requests.DeleteFoodRequest;
 import com.example.edaappserver.requests.EditFoodRequest;
-import com.example.edaappserver.restaurant.Food;
+import com.example.edaappserver.restaurant.MenuItemEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FoodService {
     private final FoodRepository foodRepository;
-    public List<Food> getFood() {
+    public List<MenuItemEntity> getFood() {
         return foodRepository.findAll();
     }
 
@@ -25,7 +25,7 @@ public class FoodService {
         //    private double price;
         //    private String name;
         //    private String pictureUrl;
-        var food = Food.builder()
+        var food = MenuItemEntity.builder()
                 .quantity(addFoodRequest.getQuantity())
                 .price(addFoodRequest.getPrice())
                 .name(addFoodRequest.getName())
@@ -40,20 +40,20 @@ public class FoodService {
         return "походу проконало, ахуеть " + food.getId();
     }
 
-    public String setFoodUrl(Food food){
-        food.setPictureUrl(
-                food.getPictureUrl() + food.getId() + ".jpg"
+    public String setFoodUrl(MenuItemEntity menuItemEntity){
+        menuItemEntity.setPictureUrl(
+                menuItemEntity.getPictureUrl() + menuItemEntity.getId() + ".jpg"
         );
-        foodRepository.save(food);
-        return foodRepository.findById(food.getId()).toString();
+        foodRepository.save(menuItemEntity);
+        return foodRepository.findById(menuItemEntity.getId()).toString();
     }
 
-    public String setFoodPrice(Food food){
-        food.setPrice(
-                food.getPrice()
+    public String setFoodPrice(MenuItemEntity menuItemEntity){
+        menuItemEntity.setPrice(
+                menuItemEntity.getPrice()
         );
-        foodRepository.save(food);
-        return foodRepository.findById(food.getId()).toString();
+        foodRepository.save(menuItemEntity);
+        return foodRepository.findById(menuItemEntity.getId()).toString();
     }
 
     public String deleteFood(DeleteFoodRequest addFoodRequest) {
@@ -68,7 +68,7 @@ public class FoodService {
         //    private int quantity;
         //    private double price;
         //    private String name;
-        var food = Food.builder()
+        var food = MenuItemEntity.builder()
                 .id(request.getId())
                 .quantity(request.getQuantity())
                 .price(request.getPrice())

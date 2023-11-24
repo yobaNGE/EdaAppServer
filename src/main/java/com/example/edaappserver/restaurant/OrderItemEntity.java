@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "orderItems")
-public class OrderItem {
+public class OrderItemEntity {
     @Id
     @SequenceGenerator(
             name = "orderItem_sequence",
@@ -25,11 +25,11 @@ public class OrderItem {
     )
     private long id;
     private int quantity;
-    @ManyToOne(targetEntity = Order.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = OrderEntity.class)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
-    private Order order;
+    private OrderEntity orderEntity;
 
-    @ManyToOne(targetEntity = Food.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = MenuItemEntity.class)
     @JoinColumn(name = "food_id", referencedColumnName = "id")
-    private Food food;
+    private MenuItemEntity menuItemEntity;
 }

@@ -4,7 +4,6 @@ import com.example.edaappserver.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -13,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Order {
+public class OrderEntity {
     @Id
     @SequenceGenerator(
             name = "order_sequence",
@@ -37,30 +36,20 @@ public class Order {
     3-заказ отменен
     4-...
     */
+    //@ManyToMany(targetEntity = OrderItemEntity.class, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = OrderItemEntity.class)
+    private List<OrderItemEntity> orderItemEntityList;
 
-    @OneToMany(targetEntity = OrderItem.class, cascade = CascadeType.ALL)
-    private List<OrderItem> orderItemListList;
-
-    @ManyToOne(targetEntity = UserEntity.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = UserEntity.class)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
-
-
-
-//    private int[] foodId;
-//    // 1:2:3
-//    private int[] foodAmount;
-
-
-//    private long userId;
-
 
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
                 ", status=" + status +
-                ", orderItemListList=" + orderItemListList +
+                ", orderItemListList=" + orderItemEntityList +
                 ", user=" + user +
                 '}';
     }

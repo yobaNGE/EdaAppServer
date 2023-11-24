@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table
-public class Food implements Comparable<Food>{
+public class MenuItemEntity implements Comparable<MenuItemEntity>{
     @Id
     @SequenceGenerator(
             name = "food_sequence",
@@ -68,7 +68,7 @@ public class Food implements Comparable<Food>{
     }
 
     @Override
-    public int compareTo(Food o) {
+    public int compareTo(MenuItemEntity o) {
         int id = o.getId();
             if (this.id < id)
                 return -1;

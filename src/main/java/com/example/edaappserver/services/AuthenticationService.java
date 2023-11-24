@@ -83,7 +83,7 @@ public class AuthenticationService {
     }
 
     public String changeRole(ChangeRoleRequest request) {
-        var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        var user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("User email not found " + request.getEmail()));
         user.setRole(Role.ADMIN);
         userRepository.save(user);
         return user.getRole().toString();

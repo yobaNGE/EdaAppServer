@@ -3,11 +3,9 @@ package com.example.edaappserver.controllers;
 import com.example.edaappserver.requests.AddFoodRequest;
 import com.example.edaappserver.requests.DeleteFoodRequest;
 import com.example.edaappserver.requests.EditFoodRequest;
-import com.example.edaappserver.restaurant.Food;
+import com.example.edaappserver.restaurant.MenuItemEntity;
 import com.example.edaappserver.services.FoodService;
-import com.example.edaappserver.user.Role;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +20,7 @@ public class FoodController {
     }
 
     @GetMapping("/getFood")
-    public List<Food> getFood(){
+    public List<MenuItemEntity> getFood(){
         return foodService.getFood();
     }
 
