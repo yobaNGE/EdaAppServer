@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Order {
+public class OrderEntity {
     @Id
     @SequenceGenerator(
             name = "order_sequence",
@@ -38,8 +38,8 @@ public class Order {
     4-...
     */
 
-    @OneToMany(targetEntity = OrderItem.class, cascade = CascadeType.ALL)
-    private List<OrderItem> orderItemListList;
+    @OneToMany(targetEntity = OrderItemEntity.class, cascade = CascadeType.ALL)
+    private List<OrderItemEntity> orderItemListList;
 
     @ManyToOne(targetEntity = UserEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
