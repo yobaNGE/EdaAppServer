@@ -83,8 +83,20 @@ public class OrderService {
     public String cancelOrder(long id) {
         var order = orderRepository.findOrderById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
-        order.setStatus(3);
-        orderRepository.save(order);
-        return "Заказ отменен";
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!order.getUser().getEmail().equals(authentication.getName()))
+            return "Вы не можете отменить чужой заказ";
+
+        if (order.getStatus() != 3){
+            order.setStatus(3);
+            orderRepository.save(order);
+            return "Заказ отменён";
+        }
+        else {
+            return "Заказ уже отменён";
+        }
+
     }
 }
