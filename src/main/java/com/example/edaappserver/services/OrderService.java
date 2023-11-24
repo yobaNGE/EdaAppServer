@@ -76,4 +76,12 @@ public class OrderService {
             }
         return s;
     }
+
+    public String cancelOrder(long id){
+        var order = orderRepository.findOrderById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        order.setStatus(3);
+        orderRepository.save(order);
+        return "Заказ отменен";
+    }
 }

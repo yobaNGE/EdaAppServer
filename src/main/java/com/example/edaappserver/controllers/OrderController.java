@@ -31,4 +31,11 @@ public class OrderController {
     ){
         return orderService.getOrder(id);
     }
+
+    @PutMapping("/cancelOrder/{id}")
+    public String cancelOrder(
+            @PathVariable("id") long id
+    ){
+        return orderService.cancelOrder(id);
+    }
 }
