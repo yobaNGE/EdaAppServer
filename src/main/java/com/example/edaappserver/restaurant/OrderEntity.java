@@ -37,7 +37,7 @@ public class OrderEntity {
     4- ...
     */
     //@ManyToMany(targetEntity = OrderItemEntity.class, cascade = CascadeType.ALL)
-    @OneToMany(targetEntity = OrderItemEntity.class)
+    @OneToMany(targetEntity = OrderItemEntity.class, cascade = CascadeType.ALL)
     private List<OrderItemEntity> orderItemEntityList;
 
     @ManyToOne(targetEntity = UserEntity.class)

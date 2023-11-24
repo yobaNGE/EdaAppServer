@@ -25,7 +25,7 @@ public class OrderItemEntity {
     )
     private long id;
     private int quantity;
-    @ManyToOne(targetEntity = OrderEntity.class)
+    @ManyToOne(targetEntity = OrderEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private OrderEntity orderEntity;
 
