@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -37,6 +39,12 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse register(RegisterRequest request) {
+        Optional<UserEntity> userRepositoryByEmail = userRepository.findByEmail(request.getEmail());
+
+        if (userRepositoryByEmail.isPresent()) {
+            throw new RuntimeException("User with email " + request.getEmail() + " already exists");
+        }
+
         var user = UserEntity.builder()
                 .name(request.getName())
                 .surname(request.getSurname())
@@ -44,16 +52,11 @@ public class AuthenticationService {
                 .passwordus(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
-        try {
-            var userDB = userRepository.findByEmail(request.getEmail()).orElseThrow();
-            if (user.getUsername().equals(userDB.getUsername()))
-                throw new UsernameNotFoundException("потом доделаю и не ебет");
-            // todo сделать нормально, а не хуйню с исключениями
-        }catch (Exception e){
 
-        }
         userRepository.save(user);
+
         var jwtToken = jwtService.generateToken(user);
+
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
