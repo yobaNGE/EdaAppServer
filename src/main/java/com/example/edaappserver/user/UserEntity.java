@@ -2,6 +2,7 @@ package com.example.edaappserver.user;
 
 
 import com.example.edaappserver.restaurant.OrderEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,6 +42,7 @@ public class UserEntity implements UserDetails {
 
     @OneToMany(targetEntity = OrderEntity.class)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonBackReference
     private List<OrderEntity> orderEntityList;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

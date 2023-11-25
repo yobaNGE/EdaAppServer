@@ -1,5 +1,6 @@
 package com.example.edaappserver.restaurant;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,9 +28,11 @@ public class OrderItemEntity {
     private int quantity;
     @ManyToOne(targetEntity = OrderEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @JsonBackReference
     private OrderEntity orderEntity;
 
     @ManyToOne(targetEntity = MenuItemEntity.class)
     @JoinColumn(name = "food_id", referencedColumnName = "id")
+    @JsonBackReference
     private MenuItemEntity menuItemEntity;
 }

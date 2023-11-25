@@ -4,6 +4,7 @@ import com.example.edaappserver.repositories.FoodRepository;
 import com.example.edaappserver.repositories.OrderRepository;
 import com.example.edaappserver.repositories.UserRepository;
 import com.example.edaappserver.requests.AddOrderRequest;
+import com.example.edaappserver.responses.GetOrderResponse;
 import com.example.edaappserver.restaurant.MenuItemEntity;
 import com.example.edaappserver.restaurant.OrderEntity;
 import com.example.edaappserver.restaurant.OrderItemEntity;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -24,6 +26,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final FoodRepository foodRepository;
     private final UserRepository userRepository;
+
     public String createOrder(AddOrderRequest addOrderRequest) {
 
         // Получаем списки foodIds и foodQuantities
@@ -66,18 +69,18 @@ public class OrderService {
         return "order.toString()";
     }
 
-    public String getOrder(Long id) {
-        OrderEntity orderEntity = orderRepository.findOrderById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
-            String s = "";
-            for(OrderItemEntity j : orderEntity.getOrderItemEntityList()){
-                s += "OrderItem id: " + j.getId() + " Quantity: " + j.getQuantity() + "\n";
-                s += "OrderItem foodName: " + j.getMenuItemEntity().getName() + " Price: " + j.getMenuItemEntity().getPrice() + "\n";
-            }
-        return s;
+    public GetOrderResponse getOrder(Long id) {
+        Optional<OrderEntity> orderEntity = orderRepository.findOrderById(id);
+
+        return GetOrderResponse.builder()
+                .id(orderEntity.get().getId())
+                .status(orderEntity.get().getStatus())
+                .orderItemEntityList(orderEntity.get().getOrderItemEntityList())
+                .user(orderEntity.get().getUser())
+                .build();
     }
 
-    public String cancelOrder(long id){
+    public String cancelOrder(long id) {
         var order = orderRepository.findOrderById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
         order.setStatus(3);

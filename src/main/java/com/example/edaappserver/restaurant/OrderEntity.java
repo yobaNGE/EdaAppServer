@@ -1,9 +1,12 @@
 package com.example.edaappserver.restaurant;
 
 import com.example.edaappserver.user.UserEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -12,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+
 public class OrderEntity {
     @Id
     @SequenceGenerator(
@@ -38,10 +42,12 @@ public class OrderEntity {
     */
     //@ManyToMany(targetEntity = OrderItemEntity.class, cascade = CascadeType.ALL)
     @OneToMany(targetEntity = OrderItemEntity.class, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<OrderItemEntity> orderItemEntityList;
 
     @ManyToOne(targetEntity = UserEntity.class)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonBackReference
     private UserEntity user;
 
     @Override
