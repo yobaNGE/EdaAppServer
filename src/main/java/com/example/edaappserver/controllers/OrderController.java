@@ -2,6 +2,8 @@ package com.example.edaappserver.controllers;
 
 import com.example.edaappserver.requests.AddOrderRequest;
 import com.example.edaappserver.responses.AddOrderResponse;
+import com.example.edaappserver.responses.GetOrderResponse;
+import com.example.edaappserver.restaurant.OrderEntity;
 import com.example.edaappserver.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ public class OrderController {
         return orderService.createOrder(addOrderRequest);
     }
     @GetMapping("/getOrder/{id}")
-    public String getOrder(
+    public GetOrderResponse getOrder(
             @PathVariable("id") Long id
     ){
         return orderService.getOrder(id);
