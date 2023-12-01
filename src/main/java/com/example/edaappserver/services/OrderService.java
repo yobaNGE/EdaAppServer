@@ -27,76 +27,104 @@ public class OrderService {
     private final FoodRepository foodRepository;
     private final UserRepository userRepository;
 
-    public String createOrder(AddOrderRequest addOrderRequest) {
+    /**
+ * Метод для создания заказа.
+ *
+ * @param addOrderRequest Объект запроса, содержащий информацию о заказе.
+ * @return Строковое представление созданного заказа.
+ */
+public String createOrder(AddOrderRequest addOrderRequest) {
 
-        // Получаем списки foodIds и foodQuantities
-        List<Long> foodIds = Arrays.stream(addOrderRequest.getFoodIds().split(";"))
-                .map(Long::parseLong)
-                .collect(Collectors.toList());
+    // Получаем списки foodIds и foodQuantities из запроса, преобразуя их в списки Long и Integer соответственно.
+    List<Long> foodIds = Arrays.stream(addOrderRequest.getFoodIds().split(";"))
+            .map(Long::parseLong)
+            .collect(Collectors.toList());
 
-        List<Integer> foodQuantities = Arrays.stream(addOrderRequest.getFoodQantities().split(";"))
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
+    List<Integer> foodQuantities = Arrays.stream(addOrderRequest.getFoodQantities().split(";"))
+            .map(Integer::parseInt)
+            .collect(Collectors.toList());
 
-        // Получаем пользователя
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity user = (userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("User not found " + authentication.getName())));
+    // Получаем текущего аутентифицированного пользователя.
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserEntity user = (userRepository.findByEmail(authentication.getName())
+            .orElseThrow(() -> new RuntimeException("User not found " + authentication.getName())));
 
-        // Создаем заказ и сохраняем его
-        OrderEntity orderEntity = new OrderEntity();
-        orderEntity.setUser(user);
+    // Создаем новый объект заказа и устанавливаем для него пользователя.
+    OrderEntity orderEntity = new OrderEntity();
+    orderEntity.setUser(user);
 
-        // Создаем элементы заказа с использованием IntStream.range
-        List<OrderItemEntity> orderItemEntities = IntStream.range(0, foodIds.size())
-                .mapToObj(i -> {
-                    MenuItemEntity menuItemEntity = foodRepository.findFoodById(foodIds.get(i))
-                            .orElseThrow(() -> new RuntimeException("Food not found"));
+    // Создаем элементы заказа, используя списки foodIds и foodQuantities.
+    // Для каждого элемента заказа находим соответствующий пункт меню и устанавливаем количество.
+    List<OrderItemEntity> orderItemEntities = IntStream.range(0, foodIds.size())
+            .mapToObj(i -> {
+                MenuItemEntity menuItemEntity = foodRepository.findFoodById(foodIds.get(i))
+                        .orElseThrow(() -> new RuntimeException("Food not found"));
 
-                    OrderItemEntity orderItemEntity = new OrderItemEntity();
-                    orderItemEntity.setMenuItemEntity(menuItemEntity);
-                    orderItemEntity.setQuantity(foodQuantities.get(i));
-                    orderItemEntity.setOrderEntity(orderEntity);
+                OrderItemEntity orderItemEntity = new OrderItemEntity();
+                orderItemEntity.setMenuItemEntity(menuItemEntity);
+                orderItemEntity.setQuantity(foodQuantities.get(i));
+                orderItemEntity.setOrderEntity(orderEntity);
 
-                    return orderItemEntity;
-                })
-                .collect(Collectors.toList());
+                return orderItemEntity;
+            })
+            .collect(Collectors.toList());
 
-        //order.setOrderItems(orderItems);
-        orderEntity.setOrderItemEntityList(orderItemEntities);
-        // Сохраняем заказ
-        orderRepository.save(orderEntity);
-        return "order.toString()";
+    // Устанавливаем список элементов заказа для объекта заказа.
+    orderEntity.setOrderItemEntityList(orderItemEntities);
+
+    // Сохраняем заказ в репозитории.
+    orderRepository.save(orderEntity);
+
+    // Возвращаем строковое представление заказа.
+    return "order.toString()";
+}
+
+    /**
+ * Метод для получения информации о заказе по его идентификатору.
+ *
+ * @param id Идентификатор заказа.
+ * @return Объект GetOrderResponse, содержащий информацию о заказе.
+ */
+public GetOrderResponse getOrder(Long id) {
+    // Ищем заказ в репозитории по идентификатору.
+    Optional<OrderEntity> orderEntity = orderRepository.findOrderById(id);
+
+    // Строим и возвращаем ответ, содержащий информацию о заказе.
+    return GetOrderResponse.builder()
+            .id(orderEntity.get().getId()) // Устанавливаем идентификатор заказа.
+            .status(orderEntity.get().getStatus()) // Устанавливаем статус заказа.
+            .orderItemEntityList(orderEntity.get().getOrderItemEntityList()) // Устанавливаем список элементов заказа.
+            .user(orderEntity.get().getUser()) // Устанавливаем пользователя, сделавшего заказ.
+            .build(); // Строим и возвращаем объект ответа.
+}
+
+    /**
+ * Метод для отмены заказа.
+ *
+ * @param id Идентификатор заказа.
+ * @return Строковое сообщение о результате операции.
+ */
+public String cancelOrder(long id) {
+    // Ищем заказ в репозитории по идентификатору.
+    var order = orderRepository.findOrderById(id)
+            .orElseThrow(() -> new RuntimeException("Order not found"));
+
+    // Получаем текущего аутентифицированного пользователя.
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    // Проверяем, что пользователь, пытающийся отменить заказ, является его владельцем.
+    if (!order.getUser().getEmail().equals(authentication.getName()))
+        return "Вы не можете отменить чужой заказ";
+
+    // Проверяем статус заказа. Если он еще не отменен, отменяем его и сохраняем изменения в репозитории.
+    if (order.getStatus() != 3){
+        order.setStatus(3);
+        orderRepository.save(order);
+        return "Заказ отменён";
     }
-
-    public GetOrderResponse getOrder(Long id) {
-        Optional<OrderEntity> orderEntity = orderRepository.findOrderById(id);
-
-        return GetOrderResponse.builder()
-                .id(orderEntity.get().getId())
-                .status(orderEntity.get().getStatus())
-                .orderItemEntityList(orderEntity.get().getOrderItemEntityList())
-                .user(orderEntity.get().getUser())
-                .build();
+    // Если заказ уже отменен, возвращаем соответствующее сообщение.
+    else {
+        return "Заказ уже отменён";
     }
-
-    public String cancelOrder(long id) {
-        var order = orderRepository.findOrderById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (!order.getUser().getEmail().equals(authentication.getName()))
-            return "Вы не можете отменить чужой заказ";
-
-        if (order.getStatus() != 3){
-            order.setStatus(3);
-            orderRepository.save(order);
-            return "Заказ отменён";
-        }
-        else {
-            return "Заказ уже отменён";
-        }
-
-    }
+}
 }
