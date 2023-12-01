@@ -29,6 +29,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
 
+                        //.requestMatchers("/api/v1/user/**").permitAll()
+
+                        .requestMatchers("/files/**").permitAll()
+
                         .requestMatchers("/api/v1/staff/**").hasAnyRole(ADMIN.name(), STAFF.name())
 
                         .requestMatchers(HttpMethod.GET,"/api/v1/staff/**").hasAnyAuthority(ADMIN_READ.name(),STAFF_READ.name())
