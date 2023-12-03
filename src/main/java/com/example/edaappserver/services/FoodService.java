@@ -1,9 +1,11 @@
 package com.example.edaappserver.services;
 
+import com.example.edaappserver.repositories.CategoriesRepository;
 import com.example.edaappserver.repositories.FoodRepository;
 import com.example.edaappserver.requests.AddFoodRequest;
 import com.example.edaappserver.requests.DeleteFoodRequest;
 import com.example.edaappserver.requests.EditFoodRequest;
+import com.example.edaappserver.restaurant.CategoryEntity;
 import com.example.edaappserver.restaurant.MenuItemEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FoodService {
     private final FoodRepository foodRepository;
+    private final CategoriesRepository categoriesRepository;
     public List<MenuItemEntity> getFood() {
         return foodRepository.findAll();
     }
@@ -25,18 +28,18 @@ public class FoodService {
         //    private double price;
         //    private String name;
         //    private String pictureUrl;
+        CategoryEntity categoryEntity = categoriesRepository.findById(addFoodRequest.getCategoryId()).orElseThrow();
+
         var food = MenuItemEntity.builder()
                 .quantity(addFoodRequest.getQuantity())
                 .price(addFoodRequest.getPrice())
                 .name(addFoodRequest.getName())
-                .pictureUrl(
-                        "server.com/static/pictures/"
-                        // todo походу проканало, но вот ощущение что хуйню сделал, по моему проще на месте адрес формировать.
-                )
+                .pictureUrl(addFoodRequest.getPictureUrl())
+                .categoryEntity(categoryEntity)
                 .build();
 
         foodRepository.save(food);
-        setFoodUrl(food);
+        //setFoodUrl(food);
         return "походу проконало, ахуеть " + food.getId();
     }
 

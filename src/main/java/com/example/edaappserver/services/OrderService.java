@@ -1,10 +1,14 @@
 package com.example.edaappserver.services;
 
+import com.example.edaappserver.repositories.CategoriesRepository;
 import com.example.edaappserver.repositories.FoodRepository;
 import com.example.edaappserver.repositories.OrderRepository;
 import com.example.edaappserver.repositories.UserRepository;
+import com.example.edaappserver.requests.AddCategoryRequest;
 import com.example.edaappserver.requests.AddOrderRequest;
 import com.example.edaappserver.responses.GetOrderResponse;
+import com.example.edaappserver.responses.GetOrdersResponse;
+import com.example.edaappserver.restaurant.CategoryEntity;
 import com.example.edaappserver.restaurant.MenuItemEntity;
 import com.example.edaappserver.restaurant.OrderEntity;
 import com.example.edaappserver.restaurant.OrderItemEntity;
@@ -26,6 +30,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final FoodRepository foodRepository;
     private final UserRepository userRepository;
+    private final CategoriesRepository categoriesRepository;
 
     /**
  * Метод для создания заказа.
@@ -127,4 +132,44 @@ public String cancelOrder(long id) {
         return "Заказ уже отменён";
     }
 }
+
+public List<CategoryEntity> getCategories() {
+
+    List<CategoryEntity> categoryEntities = categoriesRepository.findAll();
+    return categoryEntities;
+}
+
+    public String addCategory(AddCategoryRequest addCategoryRequest) {
+
+        CategoryEntity categoryEntity = CategoryEntity.builder()
+                .category(addCategoryRequest.getCategory())
+                .categoryName(addCategoryRequest.getCategoryName())
+                .build();
+
+        categoriesRepository.save(categoryEntity);
+
+        return "Категория добавлена " + categoryEntity.getId() + " " + categoryEntity.getCategoryName();
+
+    }
+    /*
+    public class GetOrdersResponse {
+    private int id;
+    private int price;
+    List<OrderItemEntity> orderItems;
+    public class OrderItem{
+        private int id;
+        private int quantity;
+        private String name;
+
+    }
+}
+     */
+
+    public List<OrderEntity> getOrders() {
+    List<OrderEntity> orderEntities = orderRepository.findOrOrderByStatus(1);
+
+    return orderEntities;
+
+
+    }
 }

@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddFoodRequest {
-    private int quantity;
-    private double price;
-    private String name;
-    private String pictureUrl;
-    private int categoryId;
+public class AddCategoryRequest {
+    private String category;
+    private String categoryName;
 }

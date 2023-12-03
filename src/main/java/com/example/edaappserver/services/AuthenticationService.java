@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Сервис для работы с аутентификацией пользователей.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -24,6 +27,12 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * Метод для аутентификации пользователя.
+     *
+     * @param request запрос на аутентификацию
+     * @return ответ с JWT токеном
+     */
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -38,6 +47,12 @@ public class AuthenticationService {
                 .build();
     }
 
+    /**
+     * Метод для регистрации нового пользователя.
+     *
+     * @param request запрос на регистрацию
+     * @return ответ с JWT токеном
+     */
     public AuthenticationResponse register(RegisterRequest request) {
         Optional<UserEntity> userRepositoryByEmail = userRepository.findByEmail(request.getEmail());
 
@@ -62,6 +77,12 @@ public class AuthenticationService {
                 .build();
     }
 
+    /**
+     * Метод для создания администратора.
+     *
+     * @param request запрос на создание администратора
+     * @return ответ с JWT токеном
+     */
     public AuthenticationResponse createAdmin (RegisterRequest request)  {
         var user = UserEntity.builder()
                 .name(request.getName())
@@ -85,6 +106,12 @@ public class AuthenticationService {
                 .build();
     }
 
+    /**
+     * Метод для изменения роли пользователя.
+     *
+     * @param request запрос на изменение роли
+     * @return новая роль пользователя
+     */
     public String changeRole(ChangeRoleRequest request) {
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("User email not found " + request.getEmail()));
         user.setRole(Role.ADMIN);

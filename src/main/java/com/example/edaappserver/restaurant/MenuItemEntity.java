@@ -3,6 +3,7 @@ package com.example.edaappserver.restaurant;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -26,6 +27,10 @@ public class MenuItemEntity implements Comparable<MenuItemEntity>{
     private double price;
     private String name;
     private String pictureUrl;
+    @ManyToOne(targetEntity = CategoryEntity.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @Getter
+    private CategoryEntity categoryEntity;
 
     public int getId() {
         return id;

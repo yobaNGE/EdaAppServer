@@ -18,6 +18,8 @@ public class WebConfig implements WebMvcConfigurer {
  */
 public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.addResourceHandler("/files/**")
-            .addResourceLocations("classpath:/static/files/");
+            //.addResourceLocations("classpath:/static/files/")
+            //указана моя папка внешняя, в которой хранятся картинки
+            .addResourceLocations("file:/G:/ServerPictures/");
 }
 }

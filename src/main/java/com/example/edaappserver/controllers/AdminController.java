@@ -27,7 +27,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/deleteFood")
-    public String addFood(@RequestBody DeleteFoodRequest request){
+    public String deleteFood(@RequestBody DeleteFoodRequest request){
         return foodService.deleteFood(request);
     }
 

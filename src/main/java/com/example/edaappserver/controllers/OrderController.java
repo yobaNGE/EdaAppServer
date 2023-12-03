@@ -1,13 +1,17 @@
 package com.example.edaappserver.controllers;
 
+import com.example.edaappserver.requests.AddCategoryRequest;
 import com.example.edaappserver.requests.AddOrderRequest;
 import com.example.edaappserver.responses.AddOrderResponse;
 import com.example.edaappserver.responses.GetOrderResponse;
+import com.example.edaappserver.restaurant.CategoryEntity;
 import com.example.edaappserver.restaurant.OrderEntity;
 import com.example.edaappserver.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/orders")
@@ -40,4 +44,16 @@ public class OrderController {
     ){
         return orderService.cancelOrder(id);
     }
+    @PostMapping("/addCategory")
+    public String addCategory(
+            @RequestBody AddCategoryRequest addCategoryRequest
+    ){
+        return orderService.addCategory(addCategoryRequest);
+    }
+
+    @GetMapping("/getCategories")
+    public List<CategoryEntity> getCategories(){
+        return orderService.getCategories();
+    }
+
 }
