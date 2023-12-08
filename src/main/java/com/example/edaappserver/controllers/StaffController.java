@@ -1,5 +1,6 @@
 package com.example.edaappserver.controllers;
 
+import com.example.edaappserver.requests.ChangeOrderStatus;
 import com.example.edaappserver.responses.GetOrdersResponse;
 import com.example.edaappserver.restaurant.MenuItemEntity;
 import com.example.edaappserver.restaurant.OrderEntity;
@@ -7,9 +8,7 @@ import com.example.edaappserver.services.FoodService;
 import com.example.edaappserver.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,5 +28,8 @@ public class StaffController {
         return orderService.getOrders();
     }
 
-
+    @PutMapping("/changeStatus")
+    public String changeStatus(@RequestBody ChangeOrderStatus changeOrderStatus){
+        return orderService.changeStatus(changeOrderStatus);
+    }
 }

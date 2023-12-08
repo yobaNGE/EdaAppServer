@@ -6,6 +6,7 @@ import com.example.edaappserver.repositories.OrderRepository;
 import com.example.edaappserver.repositories.UserRepository;
 import com.example.edaappserver.requests.AddCategoryRequest;
 import com.example.edaappserver.requests.AddOrderRequest;
+import com.example.edaappserver.requests.ChangeOrderStatus;
 import com.example.edaappserver.responses.GetOrderResponse;
 import com.example.edaappserver.responses.GetOrdersResponse;
 import com.example.edaappserver.restaurant.CategoryEntity;
@@ -171,5 +172,13 @@ public List<CategoryEntity> getCategories() {
     return orderEntities;
 
 
+    }
+
+    public String changeStatus(ChangeOrderStatus changeOrderStatus) {
+        OrderEntity orderEntity = orderRepository.findOrderById(changeOrderStatus.getId())
+                .orElseThrow(() -> new RuntimeException("Order not found " + changeOrderStatus.getId()));
+        orderEntity.setStatus(changeOrderStatus.getStatus());
+        orderRepository.save(orderEntity);
+        return "максим калов";
     }
 }

@@ -15,6 +15,8 @@ public class GetOrdersResponse {
     private int id;
     private int price;
     List<OrderItemEntity> orderItems;
+    int userId;
+    int UserName;
     public class OrderItem{
         private int id;
         private int quantity;
