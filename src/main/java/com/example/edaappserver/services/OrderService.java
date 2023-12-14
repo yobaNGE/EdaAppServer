@@ -191,7 +191,7 @@ public List<CategoryEntity> getCategories() {
                         .status(orderEntity.getStatus())
                         .orderItems(orderEntity.getOrderItemEntityList().stream()
                                 .map(orderItemEntity -> GetOrdersResponse.OrderItem.builder()
-                                        .id(orderItemEntity.getId())
+                                        .id(orderItemEntity.getMenuItemEntity().getId())
                                         .quantity(orderItemEntity.getQuantity())
                                         .name(orderItemEntity.getMenuItemEntity().getName())
                                         .build())
