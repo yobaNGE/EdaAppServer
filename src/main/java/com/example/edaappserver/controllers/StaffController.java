@@ -24,7 +24,7 @@ public class StaffController {
     }
 
     @GetMapping("/getOrders")
-    public List<OrderEntity> getOrders(){
+    public ResponseEntity<List<GetOrdersResponse>> getOrders(){
         return orderService.getOrders();
     }
 

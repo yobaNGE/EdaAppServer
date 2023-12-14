@@ -15,6 +15,7 @@ import com.example.edaappserver.restaurant.OrderEntity;
 import com.example.edaappserver.restaurant.OrderItemEntity;
 import com.example.edaappserver.user.UserEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -166,12 +167,40 @@ public List<CategoryEntity> getCategories() {
 }
      */
 
-    public List<OrderEntity> getOrders() {
+    public ResponseEntity<List<GetOrdersResponse>> getOrders() {
     List<OrderEntity> orderEntities = orderRepository.findOrOrderByStatus(1);
-
-    return orderEntities;
-
-
+        // builder для создания GetOrdersResponse из OrderEntity
+//        private long id;
+//        private int price;
+//        private int status;
+//        List<GetOrdersResponse.OrderItem> orderItems;
+//        int userId;
+//        int UserName;
+//        public class OrderItem{
+//            private int id;
+//            private int quantity;
+//            private String name;
+//
+//        }
+        List<GetOrdersResponse> getOrdersResponses = orderEntities.stream()
+                .map(orderEntity -> GetOrdersResponse.builder()
+                        .id(orderEntity.getId())
+                        .price(orderEntity.getOrderItemEntityList().stream()
+                                .mapToInt(orderItemEntity -> (int) (orderItemEntity.getQuantity() * orderItemEntity.getMenuItemEntity().getPrice()))
+                                .sum())
+                        .status(orderEntity.getStatus())
+                        .orderItems(orderEntity.getOrderItemEntityList().stream()
+                                .map(orderItemEntity -> GetOrdersResponse.OrderItem.builder()
+                                        .id(orderItemEntity.getId())
+                                        .quantity(orderItemEntity.getQuantity())
+                                        .name(orderItemEntity.getMenuItemEntity().getName())
+                                        .build())
+                                .collect(Collectors.toList()))
+                        .userId(orderEntity.getUser().getId())
+                        .userName(orderEntity.getUser().getName())
+                        .build())
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(getOrdersResponses);
     }
 
     public String changeStatus(ChangeOrderStatus changeOrderStatus) {

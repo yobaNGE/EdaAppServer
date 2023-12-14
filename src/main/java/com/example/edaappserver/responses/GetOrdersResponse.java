@@ -12,13 +12,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetOrdersResponse {
-    private int id;
+    private long id;
     private int price;
-    List<OrderItemEntity> orderItems;
-    int userId;
-    int UserName;
-    public class OrderItem{
-        private int id;
+    private int status;
+    List<OrderItem> orderItems;
+    private long userId;
+    private String userName;
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class OrderItem{
+        private long id;
         private int quantity;
         private String name;
 
