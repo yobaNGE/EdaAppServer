@@ -8,8 +8,12 @@ import com.example.edaappserver.requests.EditFoodRequest;
 import com.example.edaappserver.restaurant.CategoryEntity;
 import com.example.edaappserver.restaurant.MenuItemEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -17,6 +21,7 @@ import java.util.List;
 public class FoodService {
     private final FoodRepository foodRepository;
     private final CategoriesRepository categoriesRepository;
+
     public List<MenuItemEntity> getFood() {
         return foodRepository.findAll();
     }
@@ -42,6 +47,9 @@ public class FoodService {
         //setFoodUrl(food);
         return "походу проконало, ахуеть " + food.getId();
     }
+
+
+
 
     public String setFoodUrl(MenuItemEntity menuItemEntity){
         menuItemEntity.setPictureUrl(
@@ -81,5 +89,13 @@ public class FoodService {
 
     }
 
+    public List<MenuItemEntity> getFoodByCategory(CategoryEntity categoryEntity){
+        return foodRepository.findAllByCategoryEntity(categoryEntity);
+    }
 
+
+    public MenuItemEntity getFoodById(int id) {
+        return foodRepository.findFoodById(id)
+                .orElseThrow(() -> new RuntimeException("Food not found"));
+    }
 }

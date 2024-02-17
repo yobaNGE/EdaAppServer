@@ -141,6 +141,12 @@ public List<CategoryEntity> getCategories() {
     return categoryEntities;
 }
 
+    public CategoryEntity getCategoryById(int id){
+        return categoriesRepository.findCategoryById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+    }
+
+
     public String addCategory(AddCategoryRequest addCategoryRequest) {
 
         CategoryEntity categoryEntity = CategoryEntity.builder()
@@ -153,6 +159,12 @@ public List<CategoryEntity> getCategories() {
         return "Категория добавлена " + categoryEntity.getId() + " " + categoryEntity.getCategoryName();
 
     }
+
+    public String createCategory(CategoryEntity categoryEntity){
+        categoriesRepository.save(categoryEntity);
+        return "Категория добавлена " + categoryEntity.getId() + " " + categoryEntity.getCategoryName();
+    }
+
     /*
     public class GetOrdersResponse {
     private int id;
@@ -167,7 +179,7 @@ public List<CategoryEntity> getCategories() {
 }
      */
 
-    public ResponseEntity<List<GetOrdersResponse>> getOrders() {
+    public List<GetOrdersResponse> getOrders() {
     List<OrderEntity> orderEntities = orderRepository.findOrOrderByStatus(1);
         // builder для создания GetOrdersResponse из OrderEntity
 //        private long id;
@@ -200,7 +212,7 @@ public List<CategoryEntity> getCategories() {
                         .userName(orderEntity.getUser().getName())
                         .build())
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(getOrdersResponses);
+        return getOrdersResponses;
     }
 
     public String changeStatus(ChangeOrderStatus changeOrderStatus) {

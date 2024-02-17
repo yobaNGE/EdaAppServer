@@ -8,8 +8,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static com.example.edaappserver.user.Permission.*;
@@ -20,16 +24,28 @@ import static com.example.edaappserver.user.Role.STAFF;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final JwtAuthenticationFilterConfig jwtAuthenticationFilter;
+
+   private final JwtAuthenticationFilterConfig jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(conf -> conf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
 
-                        //.requestMatchers("/api/v1/user/**").permitAll()
+        http.csrf(conf -> conf.disable())
+
+                .authorizeHttpRequests(auth -> auth
+
+
+                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/food/**").permitAll()
+                        .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/categories/**").permitAll()
+                        .requestMatchers("/home").permitAll()
+                        .requestMatchers("/registration").permitAll()
+                        .requestMatchers("/authenticate").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/orders/**").permitAll()
+
 
                         .requestMatchers("/files/**").permitAll()
 
@@ -47,7 +63,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT,"/api/v1/admin/**").hasAuthority(ADMIN_UPDATE.name())
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())
 
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

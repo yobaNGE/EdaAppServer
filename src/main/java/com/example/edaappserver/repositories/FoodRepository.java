@@ -1,5 +1,6 @@
 package com.example.edaappserver.repositories;
 
+import com.example.edaappserver.restaurant.CategoryEntity;
 import com.example.edaappserver.restaurant.MenuItemEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -17,4 +18,5 @@ public interface FoodRepository extends JpaRepository<MenuItemEntity,Integer> {
 
     Optional<MenuItemEntity> findFoodByName(String name);
     Optional<MenuItemEntity> findFoodById(long id);
+    List<MenuItemEntity> findAllByCategoryEntity(CategoryEntity categoryEntity);
 }
